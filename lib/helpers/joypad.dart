@@ -1,7 +1,8 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'direction.dart';
 
 class Joypad extends StatefulWidget {
