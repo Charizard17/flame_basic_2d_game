@@ -1,12 +1,15 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
+import 'package:flame/components.dart';
 
-import './components/player.dart';
+import './components/world_collidable.dart';
 import './components/world.dart';
+import './components/player.dart';
 import './helpers/direction.dart';
+import './helpers/map_loader.dart';
 
-class RayWorldGame extends FlameGame {
+class RayWorldGame extends FlameGame with HasCollidables {
   final Player _player = Player();
   final World _world = World();
 
@@ -15,6 +18,7 @@ class RayWorldGame extends FlameGame {
     super.onLoad();
     await add(_world);
     add(_player);
+    addWorldCollision();
 
     _player.position = _world.size / 2;
     camera.followComponent(
@@ -26,4 +30,12 @@ class RayWorldGame extends FlameGame {
   void onJoypadDirectionChanged(Direction direction) {
     _player.direction = direction;
   }
+
+  void addWorldCollision() async =>
+      (await MapLoader.readRayWorldCollisionMap()).forEach((rect) {
+        add(WorldCollidable()
+          ..position = Vector2(rect.left, rect.top)
+          ..width = rect.width
+          ..height = rect.height);
+      });
 }
